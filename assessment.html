@@ -28,6 +28,24 @@
   iframe{display:block;width:100%;height:78vh;min-height:720px;border:0;}
   .fallback{text-align:center;padding:18px;color:var(--muted);font-size:14px;}
   .fallback a{color:var(--blue);font-weight:700;}
+  .analysis{background:#fff;border-radius:18px;padding:26px;margin-top:22px;box-shadow:0 12px 34px rgba(12,45,82,.1);}
+  .analysis-head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:22px;}
+  .analysis-head h2{color:var(--navy);font-size:22px;}
+  .analysis-status{font-size:13px;color:var(--muted);}
+  .refresh{border:0;background:var(--navy);color:#fff;padding:10px 16px;border-radius:10px;font-family:inherit;font-weight:700;cursor:pointer;}
+  .analysis-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px;}
+  .analysis-card{border:1px solid #e3e8ee;border-radius:14px;padding:17px;text-align:center;background:#f9fbfd;}
+  .analysis-card strong{display:block;color:var(--navy);font-size:27px;line-height:1.25;}
+  .analysis-card span{font-size:12px;color:var(--muted);}
+  .level-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:22px;}
+  .level-card{padding:13px;border-radius:12px;text-align:center;font-weight:700;}
+  .foundation{background:#fff1ef;color:#a43c26;}.intermediate{background:#fff8df;color:#8a6410;}.good{background:#e9f8f3;color:#08715f;}
+  .question-results{display:grid;gap:12px;}
+  .question-row{display:grid;grid-template-columns:minmax(210px,1fr) 3fr 58px;align-items:center;gap:14px;}
+  .question-label{font-size:13px;}.bar-track{height:12px;background:#e7edf3;border-radius:999px;overflow:hidden;}
+  .bar-fill{height:100%;background:linear-gradient(90deg,#0f8f78,#39b99e);border-radius:999px;}
+  .question-value{font-size:13px;font-weight:700;color:var(--navy);text-align:left;direction:ltr;}
+  .analysis-empty{padding:26px;text-align:center;color:var(--muted);background:#f9fbfd;border:1px dashed #cbd5df;border-radius:13px;}
   @media(max-width:720px){
     header{padding:14px 10px;}
     .header-inner{align-items:flex-start;flex-direction:column;}
@@ -36,6 +54,8 @@
     .back{align-self:flex-end;}
     main{margin:14px auto;}.intro{padding:16px;}
     iframe{height:82vh;min-height:650px;}
+    .analysis{padding:18px 14px;}.analysis-head{flex-direction:column;}.analysis-grid,.level-grid{grid-template-columns:1fr 1fr;}
+    .question-row{grid-template-columns:1fr;gap:7px;}.question-value{text-align:right;}
   }
 </style>
 </head>
@@ -66,6 +86,45 @@
     <iframe src="https://ee-eu.kobotoolbox.org/x/nSebJJAX" title="DHIS2 Pre-Training Knowledge Assessment" loading="eager" allow="camera; geolocation"></iframe>
     <div class="fallback">إذا لم يظهر النموذج، <a href="https://ee-eu.kobotoolbox.org/x/nSebJJAX" target="_blank" rel="noopener">افتح التقييم في نافذة جديدة</a>.</div>
   </section>
+  <section class="analysis" id="day-one-analysis">
+    <div class="analysis-head">
+      <div>
+        <h2>تحليل اليوم الأول</h2>
+        <div class="analysis-status" id="analysis-status">جارٍ تحميل آخر النتائج…</div>
+      </div>
+      <button class="refresh" type="button" onclick="loadAnalysis()">تحديث النتائج</button>
+    </div>
+    <div id="analysis-content" class="analysis-empty">لم تُحمّل النتائج بعد.</div>
+  </section>
 </main>
+<script>
+const questionLabels=['الاستخدام الأساسي لنظام DHIS2','مفهوم Data Element','وظيفة Organization Unit','مفهوم Data Set','الغرض من Validation Rules','معنى إكمال الاستمارة','وظيفة Data Approval','أداة إنشاء الرسوم البيانية','وظيفة Dashboard','التعامل مع القيمة غير المنطقية'];
+function fmtDate(value){if(!value)return 'غير متوفر';return new Intl.DateTimeFormat('ar-IQ',{dateStyle:'medium',timeStyle:'short',timeZone:'Asia/Baghdad'}).format(new Date(value));}
+async function loadAnalysis(){
+  const status=document.getElementById('analysis-status');
+  const content=document.getElementById('analysis-content');
+  status.textContent='جارٍ تحميل آخر النتائج…';
+  try{
+    const response=await fetch(`analytics.json?t=${Date.now()}`,{cache:'no-store'});
+    if(!response.ok)throw new Error('نتائج التحليل غير متوفرة بعد');
+    const data=await response.json();
+    if(!data.participants){content.className='analysis-empty';content.textContent='لا توجد إجابات مرسلة حتى الآن.';status.textContent=`آخر تحديث: ${fmtDate(data.updated_at)}`;return;}
+    const levels=data.levels||{};const questions=data.questions||[];
+    content.className='';
+    content.innerHTML=`<div class="analysis-grid">
+      <div class="analysis-card"><strong>${data.participants}</strong><span>عدد المشاركين</span></div>
+      <div class="analysis-card"><strong>${Number(data.average_score).toFixed(1)}/10</strong><span>متوسط النتيجة</span></div>
+      <div class="analysis-card"><strong>${data.highest_score}/10</strong><span>أعلى نتيجة</span></div>
+      <div class="analysis-card"><strong>${data.lowest_score}/10</strong><span>أقل نتيجة</span></div>
+    </div><div class="level-grid">
+      <div class="level-card foundation">يحتاج إلى تأسيس: ${levels.foundation||0}</div>
+      <div class="level-card intermediate">مستوى متوسط: ${levels.intermediate||0}</div>
+      <div class="level-card good">مستوى جيد: ${levels.good||0}</div>
+    </div><div class="question-results">${questionLabels.map((label,i)=>{const pct=Number((questions[i]||{}).correct_percent||0).toFixed(0);return `<div class="question-row"><div class="question-label">${i+1}. ${label}</div><div class="bar-track"><div class="bar-fill" style="width:${pct}%"></div></div><div class="question-value">${pct}%</div></div>`;}).join('')}</div>`;
+    status.textContent=`آخر تحديث: ${fmtDate(data.updated_at)}`;
+  }catch(error){content.className='analysis-empty';content.textContent='سيظهر التحليل هنا بعد تشغيل الربط التلقائي وإرسال أول إجابة.';status.textContent=error.message;}
+}
+loadAnalysis();
+</script>
 </body>
 </html>
