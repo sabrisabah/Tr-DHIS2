@@ -77,6 +77,44 @@
     bottom:-140px; right:-100px;
     animation:float2 16s ease-in-out infinite;
   }
+  .partner-logos{
+    position:relative;
+    z-index:2;
+    width:min(920px,94vw);
+    min-height:116px;
+    display:grid;
+    grid-template-columns:1fr 1.35fr 1.35fr;
+    align-items:center;
+    gap:24px;
+    padding:12px 26px;
+    margin-bottom:28px;
+    background:rgba(255,255,255,.10);
+    border:1px solid rgba(255,255,255,.24);
+    border-radius:22px;
+    box-shadow:0 18px 45px rgba(0,0,0,.16);
+    backdrop-filter:blur(10px);
+    -webkit-backdrop-filter:blur(10px);
+    opacity:0;
+    animation:fadeDown .8s ease forwards;
+  }
+  .logo-slot{
+    height:88px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+  }
+  .logo-kri{height:82px;width:auto;filter:drop-shadow(0 4px 8px rgba(0,0,0,.18));}
+  .logo-who{width:min(250px,100%);height:auto;filter:drop-shadow(0 4px 8px rgba(0,0,0,.16));}
+  .unicef-slot{
+    background:#fff;
+    border-radius:14px;
+  }
+  .logo-unicef{
+    width:190px;
+    height:190px;
+    object-fit:contain;
+  }
   @keyframes float1{
     0%,100%{transform:translate(0,0) scale(1);}
     50%{transform:translate(40px,30px) scale(1.08);}
@@ -367,6 +405,19 @@
     .checklist{grid-template-columns:1fr;}
     section{padding:60px 16px;}
     .tab-btn{min-width:100%;}
+    .hero{padding:24px 14px 38px;}
+    .partner-logos{
+      grid-template-columns:repeat(3,1fr);
+      gap:8px;
+      min-height:82px;
+      padding:8px 10px;
+      margin-bottom:20px;
+      border-radius:16px;
+    }
+    .logo-slot{height:64px;}
+    .logo-kri{height:58px;}
+    .logo-who{width:120px;}
+    .logo-unicef{width:128px;height:128px;}
   }
 </style>
 </head>
@@ -374,6 +425,17 @@
 
 <!-- HERO -->
 <div class="hero">
+  <div class="partner-logos" aria-label="الجهات الشريكة والداعمة">
+    <div class="logo-slot">
+      <img class="logo-kri" src="KRI.png" alt="وزارة الصحة في حكومة إقليم كوردستان">
+    </div>
+    <div class="logo-slot unicef-slot">
+      <img class="logo-unicef" src="unicef-logo.png" alt="منظمة الأمم المتحدة للطفولة - اليونيسف">
+    </div>
+    <div class="logo-slot">
+      <img class="logo-who" src="WHO-AR-Iraq%202(1).png" alt="منظمة الصحة العالمية - العراق">
+    </div>
+  </div>
   <span class="badge">قسم إحصائيات HIMS — وزارة الصحة، إقليم كوردستان</span>
   <h1>برنامج تدريبي على نظام <span>DHIS2</span></h1>
   <p class="sub">بدعم من منظمة الصحة العالمية (WHO) واليونيسف (UNICEF) بالتعاون مع وزارة الصحة في إقليم كوردستان – العراق</p>
