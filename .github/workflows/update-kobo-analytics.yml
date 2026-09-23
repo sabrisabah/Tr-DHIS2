@@ -1,0 +1,38 @@
+name: Update Kobo Day One Analysis
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "*/5 * * * *"
+
+permissions:
+  contents: write
+
+jobs:
+  update-analysis:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Read Kobo data and update analysis
+        env:
+          KOBO_TOKEN: ${{ secrets.KOBO_TOKEN }}
+        run: python .github/scripts/update_kobo_analytics.py
+
+      - name: Commit updated analysis
+        run: |
+          if git diff --quiet -- analytics.json; then
+            echo "No analytics changes"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add analytics.json
+          git commit -m "Update Kobo day-one analysis"
+          git push
