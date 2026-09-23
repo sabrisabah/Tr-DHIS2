@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>التقييم المعرفي القبلي | تدريب DHIS2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{--navy:#0c2d52;--blue:#2e6aa6;--gold:#c9972c;--bg:#eef3f8;--text:#1c2733;--muted:#5c6b7a;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
+  header{background:linear-gradient(145deg,var(--navy),var(--blue));color:#fff;padding:20px;box-shadow:0 8px 24px rgba(12,45,82,.18);}
+  .header-inner{width:min(1180px,96%);margin:auto;display:flex;align-items:center;justify-content:space-between;gap:20px;}
+  .brand{display:flex;align-items:center;gap:16px;}
+  .logos{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.1);padding:7px 10px;border-radius:12px;}
+  .logos img{height:52px;width:auto;object-fit:contain;}
+  .logos .unicef{background:#fff;border-radius:7px;width:78px;}
+  h1{font-size:clamp(19px,3vw,29px);line-height:1.4;}
+  .subtitle{font-size:13px;color:rgba(255,255,255,.75);}
+  .back{color:#fff;text-decoration:none;border:1px solid rgba(255,255,255,.4);padding:9px 16px;border-radius:10px;white-space:nowrap;}
+  main{width:min(1180px,96%);margin:24px auto;}
+  .intro{background:#fff;border-radius:16px;padding:20px 24px;margin-bottom:16px;box-shadow:0 8px 26px rgba(12,45,82,.07);border-right:5px solid var(--gold);}
+  .intro h2{color:var(--navy);font-size:20px;margin-bottom:5px;}
+  .intro p{color:var(--muted);font-size:14px;}
+  .form-shell{background:#fff;border-radius:18px;overflow:hidden;box-shadow:0 12px 34px rgba(12,45,82,.1);min-height:720px;}
+  iframe{display:block;width:100%;height:78vh;min-height:720px;border:0;}
+  .fallback{text-align:center;padding:18px;color:var(--muted);font-size:14px;}
+  .fallback a{color:var(--blue);font-weight:700;}
+  @media(max-width:720px){
+    header{padding:14px 10px;}
+    .header-inner{align-items:flex-start;flex-direction:column;}
+    .brand{width:100%;flex-direction:column;align-items:flex-start;}
+    .logos img{height:40px;}.logos .unicef{width:62px;}
+    .back{align-self:flex-end;}
+    main{margin:14px auto;}.intro{padding:16px;}
+    iframe{height:82vh;min-height:650px;}
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="header-inner">
+    <div class="brand">
+      <div class="logos" aria-label="الجهات الشريكة والداعمة">
+        <img src="KRI.png" alt="وزارة الصحة في حكومة إقليم كوردستان">
+        <img class="unicef" src="unicef-logo.png" alt="اليونيسف">
+        <img src="WHO-AR-Iraq%202(1).png" alt="منظمة الصحة العالمية - العراق">
+      </div>
+      <div>
+        <h1>التقييم المعرفي القبلي لتدريب DHIS2</h1>
+        <div class="subtitle">DHIS2 Pre-Training Knowledge Assessment</div>
+      </div>
+    </div>
+    <a class="back" href="index.html">العودة إلى برنامج التدريب</a>
+  </div>
+</header>
+
+<main>
+  <section class="intro">
+    <h2>تعليمات التقييم</h2>
+    <p>يرجى اختيار اللغة المناسبة والإجابة عن جميع الأسئلة. تُستخدم النتائج لتحديد الاحتياجات التدريبية وتحسين محتوى البرنامج.</p>
+  </section>
+  <section class="form-shell" aria-label="نموذج التقييم المعرفي القبلي">
+    <iframe src="https://ee-eu.kobotoolbox.org/x/nSebJJAX" title="DHIS2 Pre-Training Knowledge Assessment" loading="eager" allow="camera; geolocation"></iframe>
+    <div class="fallback">إذا لم يظهر النموذج، <a href="https://ee-eu.kobotoolbox.org/x/nSebJJAX" target="_blank" rel="noopener">افتح التقييم في نافذة جديدة</a>.</div>
+  </section>
+</main>
+</body>
+</html>
