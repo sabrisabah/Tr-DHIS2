@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>برنامج تدريب DHIS2 | قسم إحصائيات HIMS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#0c2d52;
+    --navy2:#123a68;
+    --blue:#2E6AA6;
+    --teal:#0f8f78;
+    --coral:#d85a30;
+    --gold:#c9972c;
+    --bg:#f5f7fa;
+    --card:#ffffff;
+    --text:#1c2733;
+    --muted:#5c6b7a;
+    --border:#e3e8ee;
+    --shadow: 0 10px 30px rgba(12,45,82,0.08);
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:'Cairo', sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    line-height:1.8;
+    overflow-x:hidden;
+  }
+
+  /* ---------- reveal animation ---------- */
+  .reveal{
+    opacity:0;
+    transform:translateY(28px);
+    transition:opacity .7s ease, transform .7s ease;
+  }
+  .reveal.visible{opacity:1;transform:translateY(0);}
+  .reveal.d1{transition-delay:.05s;}
+  .reveal.d2{transition-delay:.15s;}
+  .reveal.d3{transition-delay:.25s;}
+  .reveal.d4{transition-delay:.35s;}
+
+  /* ---------- hero ---------- */
+  .hero{
+    position:relative;
+    min-height:92vh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:40px 20px;
+    background:linear-gradient(160deg,var(--navy) 0%, var(--navy2) 55%, var(--blue) 100%);
+    color:#fff;
+    overflow:hidden;
+  }
+  .hero::before, .hero::after{
+    content:"";
+    position:absolute;
+    border-radius:50%;
+    filter:blur(0px);
+    opacity:.15;
+  }
+  .hero::before{
+    width:460px;height:460px;
+    background:var(--gold);
+    top:-160px; left:-120px;
+    animation:float1 14s ease-in-out infinite;
+  }
+  .hero::after{
+    width:380px;height:380px;
+    background:var(--teal);
+    bottom:-140px; right:-100px;
+    animation:float2 16s ease-in-out infinite;
+  }
+  @keyframes float1{
+    0%,100%{transform:translate(0,0) scale(1);}
+    50%{transform:translate(40px,30px) scale(1.08);}
+  }
+  @keyframes float2{
+    0%,100%{transform:translate(0,0) scale(1);}
+    50%{transform:translate(-30px,-25px) scale(1.1);}
+  }
+  .badge{
+    display:inline-flex;align-items:center;gap:8px;
+    background:rgba(255,255,255,.12);
+    border:1px solid rgba(255,255,255,.25);
+    padding:8px 20px;border-radius:999px;
+    font-size:13px; letter-spacing:.3px;
+    margin-bottom:28px;
+    opacity:0; animation:fadeDown .8s ease forwards;
+    animation-delay:.1s;
+  }
+  .hero h1{
+    font-size:clamp(28px,5vw,50px);
+    font-weight:900;
+    max-width:900px;
+    line-height:1.35;
+    opacity:0; animation:fadeUp .9s ease forwards;
+    animation-delay:.3s;
+  }
+  .hero h1 span{color:var(--gold);}
+  .hero p.sub{
+    margin-top:18px;
+    font-size:clamp(15px,2vw,19px);
+    color:rgba(255,255,255,.85);
+    max-width:680px;
+    opacity:0; animation:fadeUp .9s ease forwards;
+    animation-delay:.5s;
+  }
+  .hero .scroll-hint{
+    margin-top:48px;
+    font-size:13px;
+    color:rgba(255,255,255,.65);
+    display:flex;flex-direction:column;align-items:center;gap:8px;
+    opacity:0; animation:fadeUp .9s ease forwards;
+    animation-delay:.75s;
+  }
+  .scroll-hint .arrow{
+    width:10px;height:10px;
+    border-right:2px solid rgba(255,255,255,.65);
+    border-bottom:2px solid rgba(255,255,255,.65);
+    transform:rotate(45deg);
+    animation:bounce 1.6s ease-in-out infinite;
+  }
+  @keyframes bounce{
+    0%,100%{transform:translateY(0) rotate(45deg);}
+    50%{transform:translateY(8px) rotate(45deg);}
+  }
+  @keyframes fadeUp{from{opacity:0;transform:translateY(24px);} to{opacity:1;transform:translateY(0);}}
+  @keyframes fadeDown{from{opacity:0;transform:translateY(-16px);} to{opacity:1;transform:translateY(0);}}
+
+  /* ---------- section shell ---------- */
+  section{
+    padding:80px 20px;
+    max-width:1080px;
+    margin:0 auto;
+  }
+  .eyebrow{
+    color:var(--gold);
+    font-weight:700;
+    font-size:13px;
+    letter-spacing:1px;
+    margin-bottom:10px;
+  }
+  h2.section-title{
+    font-size:clamp(24px,3.4vw,34px);
+    font-weight:900;
+    color:var(--navy);
+    margin-bottom:14px;
+  }
+  p.section-desc{
+    color:var(--muted);
+    font-size:16px;
+    max-width:720px;
+    margin-bottom:44px;
+  }
+
+  /* ---------- info cards ---------- */
+  .info-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:18px;
+    margin-top:-40px;
+    position:relative;
+    z-index:2;
+  }
+  .info-card{
+    background:var(--card);
+    border-radius:16px;
+    padding:26px 20px;
+    box-shadow:var(--shadow);
+    text-align:center;
+    transition:transform .35s ease, box-shadow .35s ease;
+  }
+  .info-card:hover{
+    transform:translateY(-8px);
+    box-shadow:0 18px 40px rgba(12,45,82,.14);
+  }
+  .info-card .ic{
+    width:46px;height:46px;
+    border-radius:12px;
+    margin:0 auto 14px;
+    display:flex;align-items:center;justify-content:center;
+    font-size:20px;
+    color:#fff;
+  }
+  .info-card:nth-child(1) .ic{background:var(--blue);}
+  .info-card:nth-child(2) .ic{background:var(--teal);}
+  .info-card:nth-child(3) .ic{background:var(--coral);}
+  .info-card:nth-child(4) .ic{background:var(--gold);}
+  .info-card h4{font-size:14px;color:var(--muted);font-weight:600;margin-bottom:6px;}
+  .info-card p{font-size:15px;font-weight:700;color:var(--text);}
+
+  .lead{
+    background:var(--card);
+    border-radius:18px;
+    padding:34px 30px;
+    margin-top:32px;
+    box-shadow:var(--shadow);
+    border-right:5px solid var(--gold);
+  }
+  .lead p{color:var(--text);font-size:16.5px;}
+
+  /* ---------- checklist / getting started ---------- */
+  .checklist{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:18px;
+  }
+  .check-card{
+    background:var(--card);
+    border-radius:16px;
+    padding:26px 22px;
+    box-shadow:var(--shadow);
+    position:relative;
+    overflow:hidden;
+    transition:transform .3s ease;
+  }
+  .check-card:hover{transform:translateY(-6px);}
+  .check-num{
+    position:absolute; top:14px; left:18px;
+    font-size:38px; font-weight:900;
+    color:var(--border);
+  }
+  .check-card h4{
+    font-size:16px; font-weight:700; margin-bottom:8px; color:var(--navy);
+    position:relative; z-index:1;
+  }
+  .check-card p{font-size:13.5px; color:var(--muted); position:relative; z-index:1;}
+
+  /* ---------- tabs ---------- */
+  .tabbar{
+    display:flex;
+    gap:10px;
+    margin-bottom:36px;
+    flex-wrap:wrap;
+  }
+  .tab-btn{
+    flex:1;
+    min-width:220px;
+    border:2px solid var(--border);
+    background:var(--card);
+    border-radius:14px;
+    padding:18px 20px;
+    cursor:pointer;
+    text-align:right;
+    font-family:inherit;
+    transition:all .3s ease;
+    position:relative;
+  }
+  .tab-btn .tnum{
+    font-size:12px; font-weight:700; letter-spacing:.5px;
+    color:var(--muted);
+  }
+  .tab-btn .ttitle{
+    font-size:17px; font-weight:700; color:var(--navy); margin-top:4px;
+  }
+  .tab-btn .tfocus{
+    font-size:12.5px; color:var(--muted); margin-top:6px;
+  }
+  .tab-btn.active{
+    border-color:var(--blue);
+    box-shadow:0 10px 24px rgba(46,106,166,.18);
+    transform:translateY(-3px);
+  }
+  .tab-btn.active .tnum{color:var(--blue);}
+  .tab-btn[data-day="2"].active{border-color:var(--teal); box-shadow:0 10px 24px rgba(15,143,120,.18);}
+  .tab-btn[data-day="2"].active .tnum{color:var(--teal);}
+  .tab-btn[data-day="3"].active{border-color:var(--coral); box-shadow:0 10px 24px rgba(216,90,48,.18);}
+  .tab-btn[data-day="3"].active .tnum{color:var(--coral);}
+
+  .day-panel{display:none;}
+  .day-panel.active{display:block; animation:panelIn .5s ease;}
+  @keyframes panelIn{
+    from{opacity:0; transform:translateY(14px);}
+    to{opacity:1; transform:translateY(0);}
+  }
+
+  /* ---------- timeline ---------- */
+  .timeline{
+    position:relative;
+    padding-right:26px;
+  }
+  .timeline::before{
+    content:"";
+    position:absolute;
+    right:6px; top:6px; bottom:6px;
+    width:2px;
+    background:var(--border);
+  }
+  .t-item{
+    position:relative;
+    padding-bottom:26px;
+  }
+  .t-item::before{
+    content:"";
+    position:absolute;
+    right:-26px; top:4px;
+    width:13px; height:13px;
+    border-radius:50%;
+    background:var(--card);
+    border:3px solid var(--blue);
+    transform:translateX(50%);
+  }
+  .day-panel[data-day="2"] .t-item::before{border-color:var(--teal);}
+  .day-panel[data-day="3"] .t-item::before{border-color:var(--coral);}
+  .t-item.is-break::before{
+    background:var(--gold);
+    border-color:var(--gold);
+  }
+  .t-card{
+    background:var(--card);
+    border-radius:14px;
+    padding:18px 22px;
+    box-shadow:var(--shadow);
+    transition:transform .3s ease, box-shadow .3s ease;
+  }
+  .t-item:hover .t-card{transform:translateX(-4px); box-shadow:0 14px 32px rgba(12,45,82,.12);}
+  .t-item.is-break .t-card{
+    background:#fdf3e7;
+    border:1px dashed var(--gold);
+    box-shadow:none;
+  }
+  .t-time{
+    display:inline-block;
+    font-size:12.5px;
+    font-weight:700;
+    color:#fff;
+    background:var(--blue);
+    padding:4px 12px;
+    border-radius:999px;
+    margin-bottom:10px;
+  }
+  .day-panel[data-day="2"] .t-time{background:var(--teal);}
+  .day-panel[data-day="3"] .t-time{background:var(--coral);}
+  .t-item.is-break .t-time{background:var(--gold);}
+  .t-session{font-size:16.5px; font-weight:700; color:var(--navy); margin-bottom:6px;}
+  .t-desc{font-size:14px; color:var(--muted);}
+
+  /* ---------- footer ---------- */
+  footer{
+    background:var(--navy);
+    color:rgba(255,255,255,.85);
+    text-align:center;
+    padding:46px 20px;
+    margin-top:40px;
+  }
+  footer .partners{
+    font-size:13px;
+    color:rgba(255,255,255,.55);
+    margin-top:10px;
+  }
+  footer h3{font-size:18px;font-weight:700;color:#fff;margin-bottom:6px;}
+
+  @media(max-width:900px){
+    .info-grid{grid-template-columns:repeat(2,1fr);}
+    .checklist{grid-template-columns:repeat(2,1fr);}
+    .info-grid{margin-top:20px;}
+  }
+  @media(max-width:560px){
+    .info-grid{grid-template-columns:1fr;}
+    .checklist{grid-template-columns:1fr;}
+    section{padding:60px 16px;}
+    .tab-btn{min-width:100%;}
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <span class="badge">قسم إحصائيات HIMS — وزارة الصحة، إقليم كوردستان</span>
+  <h1>برنامج تدريبي على نظام <span>DHIS2</span></h1>
+  <p class="sub">بدعم من منظمة الصحة العالمية (WHO) واليونيسف (UNICEF) بالتعاون مع وزارة الصحة في إقليم كوردستان – العراق</p>
+  <div class="scroll-hint">استكشف تفاصيل البرنامج<div class="arrow"></div></div>
+</div>
+
+<!-- OVERVIEW INFO -->
+<section>
+  <div class="info-grid">
+    <div class="info-card reveal d1">
+      <div class="ic">◷</div>
+      <h4>التواريخ</h4>
+      <p>سيتم تحديدها لاحقًا</p>
+    </div>
+    <div class="info-card reveal d2">
+      <div class="ic">◔</div>
+      <h4>التوقيت</h4>
+      <p>التدريب 09:00 – 14:00<br>الغداء بعد الساعة 14:00</p>
+    </div>
+    <div class="info-card reveal d3">
+      <div class="ic">◈</div>
+      <h4>المكان</h4>
+      <p>سيتم تحديده لاحقًا</p>
+    </div>
+    <div class="info-card reveal d4">
+      <div class="ic">◉</div>
+      <h4>المشاركون</h4>
+      <p>موظفو قسم إحصائيات HIMS</p>
+    </div>
+  </div>
+
+  <div class="lead reveal">
+    <p>سيعزز هذا التدريب المهارات العملية للمشاركين في إدخال البيانات المجمّعة، ومراجعة جودة البيانات والموافقة عليها، وتحليل وعرض بيانات الصحة الروتينية باستخدام نظام <strong>DHIS2</strong>، على مدى ثلاثة أيام تدريبية متكاملة يجمع كل منها بين الشرح النظري والتطبيق العملي المباشر.</p>
+  </div>
+</section>
+
+<!-- GETTING STARTED -->
+<section id="start">
+  <div class="eyebrow reveal">كيفية الانطلاق</div>
+  <h2 class="section-title reveal">قبل بدء التدريب</h2>
+  <p class="section-desc reveal">أربع خطوات بسيطة تضمن انطلاقة سلسة لليوم الأول من التدريب، تُنفَّذ ضمن جلسة الافتتاح والتهيئة (09:00 – 09:30).</p>
+
+  <div class="checklist">
+    <div class="check-card reveal d1">
+      <div class="check-num">١</div>
+      <h4>تسجيل الحضور والترحيب</h4>
+      <p>استقبال المشاركين، كلمة ترحيبية، والتعريف بأهداف البرنامج وتوقعات المشاركين.</p>
+    </div>
+    <div class="check-card reveal d2">
+      <div class="check-num">٢</div>
+      <h4>توزيع بيانات الدخول</h4>
+      <p>التأكد من امتلاك كل مشارك اسم مستخدم وكلمة مرور فعّالين للدخول إلى النظام.</p>
+    </div>
+    <div class="check-card reveal d3">
+      <div class="check-num">٣</div>
+      <h4>فحص الأجهزة والاتصال</h4>
+      <p>التأكد من توفر حاسوب لكل مشارك واتصال إنترنت مستقر في قاعة التدريب.</p>
+    </div>
+    <div class="check-card reveal d4">
+      <div class="check-num">٤</div>
+      <h4>تقييم معرفي مبدئي</h4>
+      <p>تقييم سريع لمستوى معرفة المشاركين بالنظام قبل بدء الجلسات التدريبية.</p>
+    </div>
+  </div>
+</section>
+
+<!-- AGENDA -->
+<section id="agenda">
+  <div class="eyebrow reveal">جدول التدريب</div>
+  <h2 class="section-title reveal">برنامج الأيام الثلاثة</h2>
+  <p class="section-desc reveal">اختر يومًا لعرض جلساته بالتفصيل — كل جلسة تجمع بين الشرح والتطبيق العملي الموجّه.</p>
+
+  <div class="tabbar reveal">
+    <button class="tab-btn active" data-day="1" onclick="showDay(1)">
+      <div class="tnum">اليوم الأول</div>
+      <div class="ttitle">إدخال البيانات المجمّعة</div>
+      <div class="tfocus">الإدخال الدقيق والكامل للبيانات الصحية الروتينية</div>
+    </button>
+    <button class="tab-btn" data-day="2" onclick="showDay(2)">
+      <div class="tnum">اليوم الثاني</div>
+      <div class="ttitle">جودة البيانات والموافقة</div>
+      <div class="tfocus">مراجعة والتحقق من صحة البيانات والموافقة عليها</div>
+    </button>
+    <button class="tab-btn" data-day="3" onclick="showDay(3)">
+      <div class="tnum">اليوم الثالث</div>
+      <div class="ttitle">تحليل البيانات وتصورها</div>
+      <div class="tfocus">تحويل بيانات DHIS2 إلى رسوم بيانية وجداول محورية</div>
+    </button>
+  </div>
+
+  <!-- DAY 1 -->
+  <div class="day-panel active" data-day="1">
+    <div class="timeline">
+      <div class="t-item"><div class="t-card">
+        <span class="t-time">09:00 – 09:30</span>
+        <div class="t-session">الافتتاح والتهيئة</div>
+        <div class="t-desc">كلمة ترحيبية، تعريف بالمشاركين، أهداف التدريب، توقعات المشاركين، وتقييم معرفي مبدئي.</div>
+      </div></div>
+      <div class="t-item"><div class="t-card">
+        <span class="t-time">09:30 – 10:15</span>
+        <div class="t-session">نظام DHIS2 والبيانات المجمّعة</div>
+        <div class="t-desc">نظرة عامة على DHIS2؛ الوحدات التنظيمية، عناصر البيانات، تركيبات الفئات، الاستمارات (Data Sets) والفترات الزمنية للتقارير.</div>
+      </div></div>
+      <div class="t-item"><div class="t-card">
+        <span class="t-time">10:15 – 11:00</span>
+        <div class="t-session">التنقل وإعداد إدخال البيانات</div>
+        <div class="t-desc">تسجيل دخول وتنقل عملي؛ اختيار الوحدة التنظيمية والاستمارة والفترة الزمنية الصحيحة؛ فهم استمارة إدخال البيانات.</div>
+      </div></div>
+      <div class="t-item is-break"><div class="t-card">
+        <span class="t-time">11:00 – 11:30</span>
+        <div class="t-session">☕ استراحة قهوة</div>
+        <div class="t-desc">استراحة وتواصل بين المشاركين.</div>
+      </div></div>
+      <div class="t-item"><div class="t-card">
+        <span class="t-time">11:30 – 12:30</span>
+        <div class="t-session">آلية إدخال البيانات المجمّعة</div>
+        <div class="t-desc">إدخال، حفظ، تعديل وإكمال البيانات المجمّعة؛ استخدام التعليقات واتباع آلية التقارير المتفق عليها — عرض توضيحي يتبعه تدريب موجّه.</div>
+      </div></div>
+      <div class="t-item"><div class="t-card">
+        <span class="t-time">12:30 – 13:30</span>
+        <div class="t-session">تمرين عملي على إدخال البيانات</div>
+        <div class="t-desc">يدخل المشاركون تقريرًا شهريًا نموذجيًا، يصححون الأخطاء، يتأكدون من الاكتمال ويقدّمون الاستمارة المكتملة.</div>
+      </div></div>
+      <div class="t-item"><div class="t-card">
+        <span class="t-time">13:30 – 13:45</span>
+        <div class="t-session">تمرين استكشاف الأخطاء</div>
+        <div class="t-desc">مراجعة الأخطاء الشائعة في إدخال البيانات وتوضيح كيفية اكتشافها وتصحيحها.</div>
+      </div></div>
+      <div class="t-item"><div class="t-card">
+        <span class="t-time">13:45 – 14:00</span>
+        <div class="t-session">المراجعة والختام</div>
+        <div class="t-desc">تلخيص اليوم الأول، الأسئلة، والتحضير لجلسات جودة البيانات.</div>
+      </div></div>
+      <div class="t-item is-break"><div class="t-card">
+        <span class="t-time">من 14:00</span>
+        <div class="t-session">🍽 الغداء</div>
+        <div class="t-desc">غداء بعد انتهاء جلسات التدريب لليوم.</div>
+      </div></div>
+    </div>
+  </div>
+
+  <!-- DAY 2 -->
+  <div class="day-panel" data-day="2">
+    <div class="timeline">
+      <div class="t-item"><div class="t-card">
+        <span class="t-time">09:00 – 09:15</span>
+        <div class="t-session">تلخيص اليوم الأول</div>
+        <div class="t-desc">مراجعة أهم النقاط والإجابة عن أسئلة تمرين إدخال البيانات.</div>
+      </div></div>
+      <div class="t-item"><div class="t-card">
+        <span class="t-time">09:15 – 10:00</span>
+        <div class="t-session">مبادئ جودة البيانات</div>
+        <div class="t-desc">تطبيق الأبعاد الأساسية لجودة البيانات: الاكتمال، الالتزام بالوقت، الدقة، الاتساق والصحة.</div>
+      </div></div>
+      <div class="t-item"><div class="t-card">
+        <span class="t-time">10:00 – 11:00</span>
+        <div class="t-session">التقارير ومراجعة الاكتمال</div>
+        <div class="t-desc">استخدام التقارير القياسية، تقارير الاستمارات، معدلات الإبلاغ والاكتمال، وتقارير الالتزام بالوقت لتحديد التقارير المفقودة أو المتأخرة.</div>
+      </div></div>
+      <div class="t-item is-break"><div class="t-card">
+        <span class="t-time">11:00 – 11:30</span>
+        <div class="t-session">☕ استراحة قهوة</div>
+        <div class="t-desc">استراحة وتواصل بين المشاركين.</div>
+      </div></div>
+      <div class="t-item"><div class="t-card">
+        <span class="t-time">11:30 – 12:15</span>
+        <div class="t-session">قواعد التحقق والمتابعة</div>
+        <div class="t-desc">تشغيل قواعد التحقق (Validation Rules)، تفسير النتائج، التحقيق في التناقضات، توثيق التصحيحات والتواصل مع وحدات الإبلاغ.</div>
+      </div></div>
+      <div class="t-item"><div class="t-card">
+        <span class="t-time">12:15 – 13:00</span>
+        <div class="t-session">آلية الموافقة على البيانات</div>
+        <div class="t-desc">فهم مستويات وحالات الموافقة؛ تقديم، اعتماد، قبول، رفض وإلغاء اعتماد البيانات حسب الأدوار والمسؤوليات المحددة.</div>
+      </div></div>
+      <div class="t-item"><div class="t-card">
+        <span class="t-time">13:00 – 13:45</span>
+        <div class="t-session">تمرين عملي على الجودة والموافقة</div>
+        <div class="t-desc">مراجعة تقرير نموذجي، تحديد مشاكل الجودة، تشغيل التحقق، تصحيح البيانات وإكمال إجراء الموافقة المناسب.</div>
+      </div></div>
+      <div class="t-item"><div class="t-card">
+        <span class="t-time">13:45 – 14:00</span>
+        <div class="t-session">المراجعة والختام</div>
+        <div class="t-desc">تلخيص اليوم الثاني، الأسئلة، والتحضير لجلسات تحليل البيانات.</div>
+      </div></div>
+      <div class="t-item is-break"><div class="t-card">
+        <span class="t-time">من 14:00</span>
+        <div class="t-session">🍽 الغداء</div>
+        <div class="t-desc">غداء بعد انتهاء جلسات التدريب لليوم.</div>
+      </div></div>
+    </div>
+  </div>
+
+  <!-- DAY 3 -->
+  <div class="day-panel" data-day="3">
+    <div class="timeline">
+      <div class="t-item"><div class="t-card">
+        <span class="t-time">09:00 – 09:15</span>
+        <div class="t-session">تلخيص اليوم الثاني</div>
+        <div class="t-desc">مراجعة أهم النقاط وتوضيح الأسئلة حول جودة البيانات والتحقق والموافقة.</div>
+      </div></div>
+      <div class="t-item"><div class="t-card">
+        <span class="t-time">09:15 – 10:00</span>
+        <div class="t-session">أساسيات تحليل البيانات</div>
+        <div class="t-desc">ترجمة الأسئلة البرامجية إلى تحليل؛ اختيار المؤشرات وعناصر البيانات والوحدات التنظيمية والفترات؛ مقارنة الاتجاهات والأداء.</div>
+      </div></div>
+      <div class="t-item"><div class="t-card">
+        <span class="t-time">10:00 – 11:00</span>
+        <div class="t-session">أداة Data Visualizer</div>
+        <div class="t-desc">إنشاء الرسوم البيانية في DHIS2؛ اختيار نوع العرض المناسب؛ ضبط الأبعاد والفلاتر والتخطيط والعناوين والمفاتيح؛ حفظ وتحديث التصورات.</div>
+      </div></div>
+      <div class="t-item is-break"><div class="t-card">
+        <span class="t-time">11:00 – 11:30</span>
+        <div class="t-session">☕ استراحة قهوة</div>
+        <div class="t-desc">استراحة وتواصل بين المشاركين.</div>
+      </div></div>
+      <div class="t-item"><div class="t-card">
+        <span class="t-time">11:30 – 12:30</span>
+        <div class="t-session">تمرين إعداد الرسوم البيانية</div>
+        <div class="t-desc">إعداد وتفسير الرسوم الخطية والعمودية والشريطية؛ تطبيق الفلاتر ومقارنة النتائج عبر الفترات الزمنية والمواقع.</div>
+      </div></div>
+      <div class="t-item"><div class="t-card">
+        <span class="t-time">12:30 – 13:30</span>
+        <div class="t-session">الجداول المحورية في DHIS2</div>
+        <div class="t-desc">بناء جدول محوري في Data Visualizer؛ ترتيب الصفوف والأعمدة والفلاتر؛ تطبيق الإجماليات وخيارات العرض الأساسية؛ حفظ وتصدير النتائج.</div>
+      </div></div>
+      <div class="t-item"><div class="t-card">
+        <span class="t-time">13:30 – 14:00</span>
+        <div class="t-session">العروض والتقييم والختام</div>
+        <div class="t-desc">يقدّم المشاركون مخرجات مختارة، يكملون التقييم البعدي للتدريب، ويتفقون على إجراءات المتابعة.</div>
+      </div></div>
+      <div class="t-item is-break"><div class="t-card">
+        <span class="t-time">من 14:00</span>
+        <div class="t-session">🍽 الغداء</div>
+        <div class="t-desc">غداء بعد انتهاء جلسات التدريب لليوم.</div>
+      </div></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <h3>قسم إحصائيات HIMS — وزارة الصحة، إقليم كوردستان</h3>
+  <p>برنامج تدريبي على نظام DHIS2 لموظفي القسم</p>
+  <div class="partners">بدعم من منظمة الصحة العالمية (WHO) واليونيسف (UNICEF) بالتعاون مع وزارة الصحة في إقليم كوردستان – العراق</div>
+</footer>
+
+<script>
+  function showDay(n){
+    document.querySelectorAll('.tab-btn').forEach(b=>b.classList.toggle('active', b.dataset.day==n));
+    document.querySelectorAll('.day-panel').forEach(p=>p.classList.toggle('active', p.dataset.day==n));
+  }
+
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        e.target.classList.add('visible');
+        io.unobserve(e.target);
+      }
+    });
+  }, {threshold:0.15});
+  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+</script>
+
+</body>
+</html>
