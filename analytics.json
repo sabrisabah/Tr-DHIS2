@@ -1,14 +1,75 @@
 {
-  "updated_at": null,
+  "updated_at": "2026-09-23T12:48:00.481904+00:00",
   "asset_uid": "aErF75hMg62Y4nCBoJXQbP",
-  "participants": 0,
-  "average_score": 0,
-  "highest_score": 0,
-  "lowest_score": 0,
+  "participants": 1,
+  "average_score": 9.0,
+  "highest_score": 9,
+  "lowest_score": 9,
   "levels": {
     "foundation": 0,
     "intermediate": 0,
-    "good": 0
+    "good": 1
   },
-  "questions": []
+  "questions": [
+    {
+      "question": "q1",
+      "answered": 1,
+      "correct": 1,
+      "correct_percent": 100.0
+    },
+    {
+      "question": "q2",
+      "answered": 1,
+      "correct": 1,
+      "correct_percent": 100.0
+    },
+    {
+      "question": "q3",
+      "answered": 1,
+      "correct": 1,
+      "correct_percent": 100.0
+    },
+    {
+      "question": "q4",
+      "answered": 1,
+      "correct": 1,
+      "correct_percent": 100.0
+    },
+    {
+      "question": "q5",
+      "answered": 1,
+      "correct": 1,
+      "correct_percent": 100.0
+    },
+    {
+      "question": "q6",
+      "answered": 1,
+      "correct": 1,
+      "correct_percent": 100.0
+    },
+    {
+      "question": "q7",
+      "answered": 1,
+      "correct": 1,
+      "correct_percent": 100.0
+    },
+    {
+      "question": "q8",
+      "answered": 1,
+      "correct": 1,
+      "correct_percent": 100.0
+    },
+    {
+      "question": "q9",
+      "answered": 1,
+      "correct": 1,
+      "correct_percent": 100.0
+    },
+    {
+      "question": "q10",
+      "answered": 1,
+      "correct": 0,
+      "correct_percent": 0.0
+    }
+  ]
 }
