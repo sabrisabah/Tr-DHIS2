@@ -1,75 +1,75 @@
 {
-  "updated_at": "2026-09-23T12:48:00.481904+00:00",
+  "updated_at": "2026-09-23T12:52:11.727336+00:00",
   "asset_uid": "aErF75hMg62Y4nCBoJXQbP",
-  "participants": 1,
-  "average_score": 9.0,
+  "participants": 2,
+  "average_score": 5.5,
   "highest_score": 9,
-  "lowest_score": 9,
+  "lowest_score": 2,
   "levels": {
-    "foundation": 0,
+    "foundation": 1,
     "intermediate": 0,
     "good": 1
   },
   "questions": [
     {
       "question": "q1",
-      "answered": 1,
-      "correct": 1,
+      "answered": 2,
+      "correct": 2,
       "correct_percent": 100.0
     },
     {
       "question": "q2",
-      "answered": 1,
+      "answered": 2,
       "correct": 1,
-      "correct_percent": 100.0
+      "correct_percent": 50.0
     },
     {
       "question": "q3",
-      "answered": 1,
+      "answered": 2,
       "correct": 1,
-      "correct_percent": 100.0
+      "correct_percent": 50.0
     },
     {
       "question": "q4",
-      "answered": 1,
+      "answered": 2,
       "correct": 1,
-      "correct_percent": 100.0
+      "correct_percent": 50.0
     },
     {
       "question": "q5",
-      "answered": 1,
+      "answered": 2,
       "correct": 1,
-      "correct_percent": 100.0
+      "correct_percent": 50.0
     },
     {
       "question": "q6",
-      "answered": 1,
+      "answered": 2,
       "correct": 1,
-      "correct_percent": 100.0
+      "correct_percent": 50.0
     },
     {
       "question": "q7",
-      "answered": 1,
+      "answered": 2,
       "correct": 1,
-      "correct_percent": 100.0
+      "correct_percent": 50.0
     },
     {
       "question": "q8",
-      "answered": 1,
+      "answered": 2,
       "correct": 1,
-      "correct_percent": 100.0
+      "correct_percent": 50.0
     },
     {
       "question": "q9",
-      "answered": 1,
+      "answered": 2,
       "correct": 1,
-      "correct_percent": 100.0
+      "correct_percent": 50.0
     },
     {
       "question": "q10",
-      "answered": 1,
-      "correct": 0,
-      "correct_percent": 0.0
+      "answered": 2,
+      "correct": 1,
+      "correct_percent": 50.0
     }
   ]
 }
