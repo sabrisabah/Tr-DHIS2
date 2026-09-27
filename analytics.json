@@ -1,75 +1,75 @@
 {
-  "updated_at": "2026-09-27T07:58:42.343437+00:00",
+  "updated_at": "2026-09-27T08:25:35.786670+00:00",
   "asset_uid": "aErF75hMg62Y4nCBoJXQbP",
-  "participants": 0,
-  "average_score": 0,
-  "highest_score": 0,
-  "lowest_score": 0,
+  "participants": 17,
+  "average_score": 9.59,
+  "highest_score": 10,
+  "lowest_score": 7,
   "levels": {
     "foundation": 0,
-    "intermediate": 0,
-    "good": 0
+    "intermediate": 1,
+    "good": 16
   },
   "questions": [
     {
       "question": "q1",
-      "answered": 0,
-      "correct": 0,
-      "correct_percent": 0
+      "answered": 17,
+      "correct": 17,
+      "correct_percent": 100.0
     },
     {
       "question": "q2",
-      "answered": 0,
-      "correct": 0,
-      "correct_percent": 0
+      "answered": 17,
+      "correct": 16,
+      "correct_percent": 94.1
     },
     {
       "question": "q3",
-      "answered": 0,
-      "correct": 0,
-      "correct_percent": 0
+      "answered": 17,
+      "correct": 16,
+      "correct_percent": 94.1
     },
     {
       "question": "q4",
-      "answered": 0,
-      "correct": 0,
-      "correct_percent": 0
+      "answered": 17,
+      "correct": 17,
+      "correct_percent": 100.0
     },
     {
       "question": "q5",
-      "answered": 0,
-      "correct": 0,
-      "correct_percent": 0
+      "answered": 17,
+      "correct": 16,
+      "correct_percent": 94.1
     },
     {
       "question": "q6",
-      "answered": 0,
-      "correct": 0,
-      "correct_percent": 0
+      "answered": 17,
+      "correct": 17,
+      "correct_percent": 100.0
     },
     {
       "question": "q7",
-      "answered": 0,
-      "correct": 0,
-      "correct_percent": 0
+      "answered": 17,
+      "correct": 17,
+      "correct_percent": 100.0
     },
     {
       "question": "q8",
-      "answered": 0,
-      "correct": 0,
-      "correct_percent": 0
+      "answered": 17,
+      "correct": 14,
+      "correct_percent": 82.4
     },
     {
       "question": "q9",
-      "answered": 0,
-      "correct": 0,
-      "correct_percent": 0
+      "answered": 17,
+      "correct": 17,
+      "correct_percent": 100.0
     },
     {
       "question": "q10",
-      "answered": 0,
-      "correct": 0,
-      "correct_percent": 0
+      "answered": 17,
+      "correct": 16,
+      "correct_percent": 94.1
     }
   ]
 }
