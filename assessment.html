@@ -69,7 +69,7 @@
         <img src="WHO-AR-Iraq%202(1).png" alt="منظمة الصحة العالمية - العراق">
       </div>
       <div>
-        <h1>التقييم DHIS2</h1>
+        <h1>التقييم المعرفي القبلي لتدريب DHIS2</h1>
         <div class="subtitle">DHIS2 Pre-Training Knowledge Assessment</div>
       </div>
     </div>
@@ -81,7 +81,50 @@
   <section class="intro">
     <h2>تعليمات التقييم</h2>
     <p>يرجى اختيار اللغة المناسبة والإجابة عن جميع الأسئلة. تُستخدم النتائج لتحديد الاحتياجات التدريبية وتحسين محتوى البرنامج.</p>
+  </section>
+  <section class="form-shell" aria-label="نموذج التقييم المعرفي القبلي">
+    <iframe src="https://ee-eu.kobotoolbox.org/x/nSebJJAX" title="DHIS2 Pre-Training Knowledge Assessment" loading="eager" allow="camera; geolocation"></iframe>
+    <div class="fallback">إذا لم يظهر النموذج، <a href="https://ee-eu.kobotoolbox.org/x/nSebJJAX" target="_blank" rel="noopener">افتح التقييم في نافذة جديدة</a>.</div>
+  </section>
+  <section class="analysis" id="day-one-analysis">
+    <div class="analysis-head">
+      <div>
+        <h2>تحليل اليوم الأول</h2>
+        <div class="analysis-status" id="analysis-status">جارٍ تحميل آخر النتائج…</div>
+      </div>
+      <button class="refresh" type="button" onclick="loadAnalysis()">تحديث النتائج</button>
+    </div>
+    <div id="analysis-content" class="analysis-empty">لم تُحمّل النتائج بعد.</div>
+  </section>
 </main>
-
+<script>
+const questionLabels=['الاستخدام الأساسي لنظام DHIS2','مفهوم Data Element','وظيفة Organization Unit','مفهوم Data Set','الغرض من Validation Rules','معنى إكمال الاستمارة','وظيفة Data Approval','أداة إنشاء الرسوم البيانية','وظيفة Dashboard','التعامل مع القيمة غير المنطقية'];
+function fmtDate(value){if(!value)return 'غير متوفر';return new Intl.DateTimeFormat('ar-IQ',{dateStyle:'medium',timeStyle:'short',timeZone:'Asia/Baghdad'}).format(new Date(value));}
+async function loadAnalysis(){
+  const status=document.getElementById('analysis-status');
+  const content=document.getElementById('analysis-content');
+  status.textContent='جارٍ تحميل آخر النتائج…';
+  try{
+    const response=await fetch(`analytics.json?t=${Date.now()}`,{cache:'no-store'});
+    if(!response.ok)throw new Error('نتائج التحليل غير متوفرة بعد');
+    const data=await response.json();
+    if(!data.participants){content.className='analysis-empty';content.textContent='لا توجد إجابات مرسلة حتى الآن.';status.textContent=`آخر تحديث: ${fmtDate(data.updated_at)}`;return;}
+    const levels=data.levels||{};const questions=data.questions||[];
+    content.className='';
+    content.innerHTML=`<div class="analysis-grid">
+      <div class="analysis-card"><strong>${data.participants}</strong><span>عدد المشاركين</span></div>
+      <div class="analysis-card"><strong>${Number(data.average_score).toFixed(1)}/10</strong><span>متوسط النتيجة</span></div>
+      <div class="analysis-card"><strong>${data.highest_score}/10</strong><span>أعلى نتيجة</span></div>
+      <div class="analysis-card"><strong>${data.lowest_score}/10</strong><span>أقل نتيجة</span></div>
+    </div><div class="level-grid">
+      <div class="level-card foundation">يحتاج إلى تأسيس: ${levels.foundation||0}</div>
+      <div class="level-card intermediate">مستوى متوسط: ${levels.intermediate||0}</div>
+      <div class="level-card good">مستوى جيد: ${levels.good||0}</div>
+    </div><div class="question-results">${questionLabels.map((label,i)=>{const pct=Number((questions[i]||{}).correct_percent||0).toFixed(0);return `<div class="question-row"><div class="question-label">${i+1}. ${label}</div><div class="bar-track"><div class="bar-fill" style="width:${pct}%"></div></div><div class="question-value">${pct}%</div></div>`;}).join('')}</div>`;
+    status.textContent=`آخر تحديث: ${fmtDate(data.updated_at)}`;
+  }catch(error){content.className='analysis-empty';content.textContent='سيظهر التحليل هنا بعد تشغيل الربط التلقائي وإرسال أول إجابة.';status.textContent=error.message;}
+}
+loadAnalysis();
+</script>
 </body>
 </html>
